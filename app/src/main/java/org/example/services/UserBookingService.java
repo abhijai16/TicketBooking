@@ -18,7 +18,7 @@ public class UserBookingService {
     private User user;
     private List<User> userList;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private static final String USER_FILE_PATH = "/home/jarvis/Abhijai/Coding/Backend/TicketBooking/app/src/main/java/org/example/localDb/users.json";
+    private static final String USER_FILE_PATH = "src/main/java/org/example/localDb/users.json";
 
      public UserBookingService() throws IOException{
         objectMapper = new ObjectMapper();

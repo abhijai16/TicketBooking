@@ -16,11 +16,21 @@ public class TrainService {
 
     private final List<Train> trainList;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String TRAIN_DB_PATH = "../localDB/trains.json";
+    private static final String TRAIN_DB_PATH = "src/main/java/org/example/localDb/trains.json";
 
-    public TrainService() throws IOException {
+    public TrainService() throws IOException{
         File trains = new File(TRAIN_DB_PATH);
+
+        System.out.println("Loading from: " + trains.getAbsolutePath());
+        System.out.println("File exists: " + trains.exists());
+
         trainList = objectMapper.readValue(trains, new TypeReference<List<Train>>() {});
+
+        System.out.println("Total trains loaded: " + trainList.size());
+
+        for(Train train : trainList){
+            System.out.println("Stations: " + train.getStations());
+        }
     }
 
     public List<Train> searchTrains(String source, String destination) {
@@ -67,26 +77,38 @@ public class TrainService {
         }
     }
 
-    private boolean validTrain(Train train, String source, String destination) {
-        // getting are stations from that particular train in a list
-        List<String> stationList = train.getStations();
+    
+private boolean validTrain(Train train, String source, String destination) {
+    List<String> stationList = train.getStations();
 
-        // getting the index of the source and destination in the stationOrder list
-        int sourceIndex = stationList.indexOf(source);
-        int destinationIndex = stationList.indexOf(destination);
+    if (stationList == null || source == null || destination == null) {
+        return false;
+    }
 
-        // checking if the source and destination are in the stationList and source is before destination
-        // in the stationList
-        // so that the train is valid
-        try{
-            return  sourceIndex != -1
-                    && destinationIndex != -1
-                    && sourceIndex < destinationIndex;
-        }catch (Exception e){
-            System.out.println("Error in validTrain: " + e.getMessage());
-            return false;
+    int sourceIndex = -1;
+    int destinationIndex = -1;
+
+    for (int i = 0; i < stationList.size(); i++) {
+        String station = stationList.get(i);
+
+        if (station == null) {
+            continue;
+        }
+
+        if (station.equalsIgnoreCase(source.trim())) {
+            sourceIndex = i;
+        }
+
+        if (station.equalsIgnoreCase(destination.trim())) {
+            destinationIndex = i;
         }
     }
+
+    return sourceIndex != -1
+            && destinationIndex != -1
+            && sourceIndex < destinationIndex;
+}
+
 
     public boolean bookTickets(Train train, int row, int seat) {
         // getting the seats from the train
