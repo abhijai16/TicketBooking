@@ -19,7 +19,7 @@ This project is my first **Java-based Ticket Booking System**, designed to stren
 🔹 **Collections & Streams API** – Efficient data handling  
 🔹 **OOP Principles** – Encapsulation, Abstraction, and Polymorphism  
 
-## 📦 **Setup & Run**  
+## 📦 **Setup & Run**  r
 
 ### **Step 1:** Clone the Repository  
 ```sh

@@ -10,4 +10,7 @@ public class UserServiceUtil{
     public static boolean checkPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
+    public static String generateTicketId() {
+        return "" + System.currentTimeMillis();
+    }
 }
