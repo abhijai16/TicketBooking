@@ -4,6 +4,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
@@ -67,6 +68,7 @@ public class Train {
         this.stations = stations;
     }
 
+    @JsonIgnore
     public String getTrainInfo(){
         return String.format("Train ID: %s Train No: %s", trainId, trainNo);
     }

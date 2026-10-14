@@ -3,6 +3,7 @@ package org.example.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.entities.Train;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class TrainService {
     private static final String TRAIN_DB_PATH = "src/main/java/org/example/localDb/trains.json";
 
     public TrainService() throws IOException{
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
         File trains = new File(TRAIN_DB_PATH);
 
         System.out.println("Loading from: " + trains.getAbsolutePath());

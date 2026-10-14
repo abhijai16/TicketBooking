@@ -1,43 +1,74 @@
 [ {
-  "password" : "fixed",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "bug"
 }, {
-  "password" : "testing",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "signupTesting"
 }, {
-  "password" : "World",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "Hello"
 }, {
-  "password" : "b",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "a"
 }, {
-  "password" : "f",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "2"
 }, {
-  "password" : "f",
   "hashedPassword" : null,
   "ticketsBooked" : null,
   "userId" : null,
   "username" : "f"
 }, {
-  "password" : "plogp2quy",
   "hashedPassword" : "$2a$10$dgO/GAWArwbKn1Knnl/buOMtDUxqRHRN5am5MwUZKMS6pS4WSdAti",
   "ticketsBooked" : [ ],
   "userId" : "6414281b-0ab8-44c7-bbb2-c399c7576e8c",
   "username" : "abhiijaiii"
+}, {
+  "hashedPassword" : "$2a$10$tnM44BFmJWCppMkwLwQI1uh/6gQreugYEWv7YYYO3T60dX6hbGT9a",
+  "ticketsBooked" : [ ],
+  "userId" : "169a111d-6f97-4299-ad6f-c1ba3d1a1b63",
+  "username" : "abhijai"
+}, {
+  "hashedPassword" : "$2a$10$pYbhAfikKtLDLfIGYxRMBOqY1iE3BOpcuDJeLWxfkxY.NqLZP4LUC",
+  "ticketsBooked" : [ {
+    "ticket_id" : "1791916449010",
+    "user_id" : "3f6f39bd-bf7d-4789-9331-cc674f267b36",
+    "source" : "kandivali",
+    "destination" : "malad",
+    "date_of_travel" : "2021-09-01",
+    "train" : {
+      "train_id" : "T123",
+      "train_no" : "12345",
+      "seats" : [ [ 1, 1, 1, 1, 0 ], [ 1, 1, 0, 0, 1 ], [ 0, 0, 1, 1, 0 ] ],
+      "station_times" : {
+        "kandivali" : "08:00 AM",
+        "borivali" : "09:00 AM",
+        "goregaon" : "10:00 AM",
+        "malad" : "11:00 PM"
+      },
+      "stations" : [ "kandivali", "borivali", "goregaon", "malad" ]
+    }
+  } ],
+  "userId" : "3f6f39bd-bf7d-4789-9331-cc674f267b36",
+  "username" : "dummy"
+}, {
+  "hashedPassword" : "$2a$10$y8p16F0fjz127lu8bvF.IO86sBm7IewcfnTzk6LLpmWIH7wMo8uYK",
+  "ticketsBooked" : [ ],
+  "userId" : "932d6e22-2e57-4c19-9cd3-c0fd5ee92493",
+  "username" : "bot"
+}, {
+  "hashedPassword" : "$2a$10$2P7A4V/rtAIEWsGunuEaquuJCzrgA/UP3bIpzEwXp72qRjkupLPuS",
+  "ticketsBooked" : [ ],
+  "userId" : "a524b91f-06cd-4401-bd86-3d9600d7556f",
+  "username" : "hello"
 } ]

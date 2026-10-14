@@ -15,7 +15,6 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         int option = 0;
         UserBookingService userBookingService;
-
         try{
             userBookingService = new UserBookingService();
         }
@@ -51,7 +50,7 @@ public class App {
                     }
                     System.out.println("Enter your password: ");
                     String signUpPass = scanner.nextLine();
-                    User userToSignup = new User(signUpName, signUpPass, UserServiceUtil.hashPassword(signUpPass), new ArrayList<>(), UUID.randomUUID().toString());
+                    User userToSignup = new User(signUpName, UserServiceUtil.hashPassword(signUpPass), new ArrayList<>(), UUID.randomUUID().toString());
                     try{
                         boolean userDuplicate = userBookingService.signUp(userToSignup);
                         if(userDuplicate){
