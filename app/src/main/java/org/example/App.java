@@ -6,6 +6,8 @@ import org.example.util.UserServiceUtil;
 
 import java.io.IOException;
 import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class App {
 
@@ -24,6 +26,9 @@ public class App {
         }
 
         Train trainSelectedForBooking = null;
+        String searchedSource = null;
+        String searchedDestination = null;
+
         while(option!=7){
             System.out.println("Choose option");
             System.out.println("1. Sign up");
@@ -102,9 +107,9 @@ public class App {
 
                     // taking source and destination from user
                     System.out.println("Enter the source station: ");
-                    String source = scanner.nextLine().toLowerCase(); // Converting to lowercase for consistency
+                    String source = scanner.nextLine().trim().toLowerCase(); // trim + lowercase for consistency
                     System.out.println("Enter the destination station: ");
-                    String destination = scanner.nextLine().toLowerCase(); //here also converting to lowercase
+                    String destination = scanner.nextLine().trim().toLowerCase();
 
                     //this will fetch trains that are available
                     List<Train> trains = userBookingService.getTrains(source, destination);
@@ -147,6 +152,8 @@ public class App {
                     }
 
                     trainSelectedForBooking = trains.get(selectedIndex - 1); // Convert 1-based to 0-based index
+                    searchedSource = source;               // remembered together with the selected train
+                    searchedDestination = destination;     // so the three can never disagree
                     System.out.println("✅ Train Selected: " + trainSelectedForBooking.getTrainId());
 
                     System.out.println("Available Seats:");
@@ -185,10 +192,28 @@ public class App {
 
                     System.out.println("Enter the column");
                     int col = scanner.nextInt();
+                    scanner.nextLine(); // consume the leftover newline before reading the date
+
+                    LocalDate travelDate;
+                    while (true) {
+                        System.out.println("Enter travel date (yyyy-MM-dd): ");
+                        String dateText = scanner.nextLine().trim();
+                        try {
+                            travelDate = LocalDate.parse(dateText);
+                            if (travelDate.isBefore(LocalDate.now())) {
+                                System.out.println("❌ Date cannot be in the past.");
+                            } else {
+                                break;
+                            }
+                        } catch (DateTimeParseException ex) {
+                            System.out.println("❌ Use the format yyyy-MM-dd, for example 2026-12-25.");
+                        }
+                    }
 
                     System.out.println("Booking your seat....");
 
-                    Boolean booked = userBookingService.bookTrainSeat(trainSelectedForBooking, row, col);
+                    Boolean booked = userBookingService.bookTrainSeat(trainSelectedForBooking, row, col,
+                            searchedSource, searchedDestination, travelDate.toString());
 
                     if(booked.equals(Boolean.TRUE)){
                         System.out.println("Booked! Enjoy your journey");
@@ -207,10 +232,10 @@ public class App {
 
                     if(isCancelled){
                         System.out.println("Booking cancelled successfully!");
+                        trainSelectedForBooking = null; // our copy of the seats is now out of date
+                        System.out.println("Search for a train again (option 4) before booking another seat.");
                     }
-                    else{
-                        System.out.println("Booking not found!");
-                    }
+                    // on failure, cancelBooking has already printed the specific reason
                     break;
             }
         }

@@ -40,6 +40,12 @@ public class TrainService {
         return trainList.stream().filter(train -> validTrain(train, source, destination)).collect(Collectors.toList());
     }
 
+    public Optional<Train> getTrainById(String trainId){
+        return trainList.stream()
+                        .filter(train -> train.getTrainId().equalsIgnoreCase(trainId))
+                        .findFirst();
+    }
+
     public void addTrain(Train newTrain) throws IOException{
         // Check if a train with the same trainId already exists
         Optional<Train> existingTrain = trainList.stream()

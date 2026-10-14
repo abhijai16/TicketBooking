@@ -57,7 +57,9 @@
         "malad" : "11:00 PM"
       },
       "stations" : [ "kandivali", "borivali", "goregaon", "malad" ]
-    }
+    },
+    "row" : null,
+    "seat" : null
   } ],
   "userId" : "3f6f39bd-bf7d-4789-9331-cc674f267b36",
   "username" : "dummy"
@@ -71,4 +73,29 @@
   "ticketsBooked" : [ ],
   "userId" : "a524b91f-06cd-4401-bd86-3d9600d7556f",
   "username" : "hello"
+}, {
+  "hashedPassword" : "$2a$10$RkDrMMgEeg6wWvhnXGBVP.K3rpiEHapJ8fJVnU95Os5xq2ykUuUJy",
+  "ticketsBooked" : [ {
+    "ticket_id" : "1791984069287",
+    "user_id" : "4a32569e-bfbf-4996-ac86-b648b67b6cff",
+    "source" : "kandivali",
+    "destination" : "malad",
+    "date_of_travel" : "2021-09-01",
+    "train" : {
+      "train_id" : "T123",
+      "train_no" : "12345",
+      "seats" : [ [ 1, 1, 1, 1, 0 ], [ 1, 1, 1, 0, 1 ], [ 1, 0, 1, 1, 0 ] ],
+      "station_times" : {
+        "kandivali" : "08:00 AM",
+        "borivali" : "09:00 AM",
+        "goregaon" : "10:00 AM",
+        "malad" : "11:00 AM"
+      },
+      "stations" : [ "kandivali", "borivali", "goregaon", "malad" ]
+    },
+    "row" : null,
+    "seat" : null
+  } ],
+  "userId" : "4a32569e-bfbf-4996-ac86-b648b67b6cff",
+  "username" : "dummy2"
 } ]

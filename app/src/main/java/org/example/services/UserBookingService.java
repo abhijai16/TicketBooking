@@ -89,27 +89,77 @@ public class UserBookingService {
         this.user = user;
     }
 
+    private boolean releaseSeat(Ticket ticket) {
+        Integer row = ticket.getRow();
+        Integer seat = ticket.getSeat();
+        if (row == null || seat == null || ticket.getTrain() == null) {
+            System.out.println("This ticket has no seat number saved, so no seat was freed.");
+            return true;
+        }
+        try{
+            TrainService trainService = new TrainService();
+            Optional<Train> current = trainService.getTrainById(ticket.getTrain().getTrainId());
+            if (current.isEmpty()) {
+                System.out.println("Train not found, so no seat was freed.");
+                return true;
+            }
+            Train train = current.get();
+            List<List<Integer>> seats = train.getSeats();
+            if (row < 0 || row >= seats.size() || seat < 0 || seat >= seats.get(row).size()) {
+                System.out.println("Seat position is invalid, so no seat was freed.");
+                return true;
+            }
+            return updateSeat(train, row, seat, 0);
+        }catch (IOException ex) {
+            System.out.println("Could not read the train data: " + ex.getMessage());
+            return false;
+        }
+    }
 
-
-    public boolean cancelBooking(String ticketId) throws IOException{
+    public boolean cancelBooking(String ticketId) {
         if (user == null) {
             System.out.println("Please login first.");
             return false;
         }
         if (ticketId == null || ticketId.isEmpty()) {
             System.out.println("Ticket ID cannot be null or empty.");
-            return Boolean.FALSE;
+            return false;
         }
-        boolean isRemoved =  user.getTicketsBooked().removeIf(ticket -> ticket.getTicketId().equals(ticketId) );
-        if(isRemoved) {
-            saveUserListToFile();
-            System.out.println("Ticket with ID " + ticketId + " has been canceled.");
-            return true;
-        }else{
+
+        Optional<Ticket> found = user.getTicketsBooked().stream()
+                                                        .filter(t -> t.getTicketId().equals(ticketId))
+                                                        .findFirst();
+        if(found.isEmpty()){
             System.out.println("No ticket found with ID " + ticketId);
             return false;
         }
+        Ticket ticket = found.get();
+
+        user.getTicketsBooked().remove(ticket);
+        try {
+            saveUserListToFile();
+        } catch (IOException ex) {
+            user.getTicketsBooked().add(ticket);
+            System.out.println("Could not save the cancellation: " + ex.getMessage());
+            return false;
+        }
+        
+        if (!releaseSeat(ticket)) {
+            user.getTicketsBooked().add(ticket);
+            try {
+                saveUserListToFile();
+            } catch (IOException ex) {
+                System.out.println("Warning: ticket " + ticketId + " could not be restored on disk.");
+            }
+            System.out.println("Could not free the seat, so the ticket was kept. Try again.");
+            return false;
+        }
+
+        System.out.println("Ticket with ID " + ticketId + " has been cancelled.");
+        return true;
     }
+
+    
 
     public List<Train> getTrains (String source, String destination) throws IOException {
         try{
@@ -126,41 +176,39 @@ public class UserBookingService {
         return train.getSeats();
     }
 
-    public Boolean bookTrainSeat(Train train, int row, int seat) {
-        // 1. Checks that change nothing, done BEFORE touching any data
-        if (user == null) {
+    public boolean bookTrainSeat(Train train, int row, int seat, String source, String destination, String dateOfTravel) {
+        if(user == null){
             System.out.println("Please login first.");
             return false;
         }
         List<List<Integer>> seats = train.getSeats();
-        if (row < 0 || row >= seats.size() || seat < 0 || seat >= seats.get(row).size()) {
-            return false;                              // invalid row or seat
+        if(row < 0 || row >= seats.size() || seat < 0 || seat >= seats.get(row).size()){
+            return false;
         }
-        if (seats.get(row).get(seat) != 0) {
-            return false;                              // seat already booked
+        if(seats.get(row).get(seat) != 0){
+            return false;
         }
 
-        // 2. Build the ticket (no side effects yet)
         Ticket ticket = new Ticket();
-        ticket.setSource(train.getStations().getFirst());
-        ticket.setDestination(train.getStations().getLast());
+        ticket.setSource(source);
+        ticket.setDestination(destination);
+        ticket.setDateOfTravel(dateOfTravel);
         ticket.setTrain(train);
         ticket.setUserId(user.getUserId());
-        ticket.setDateOfTravel("2021-09-01");
+        ticket.setRow(row);
+        ticket.setSeat(seat);
         ticket.setTicketId(UserServiceUtil.generateTicketId());
 
-        // 3. Reserve the seat (saved to trains.json)
         if (!updateSeat(train, row, seat, 1)) {
             return false;
         }
 
-        // 4. Record the ticket; if that fails, undo the reservation
         user.getTicketsBooked().add(ticket);
-        try {
+        try{
             saveUserListToFile();
         } catch (IOException ex) {
             user.getTicketsBooked().remove(ticket);
-            updateSeat(train, row, seat, 0);           // release the seat again
+            updateSeat(train, row, seat, 0);
             System.out.println("Could not save your ticket: " + ex.getMessage());
             return false;
         }
@@ -169,4 +217,5 @@ public class UserBookingService {
         System.out.println(ticket.getTicketInfo());
         return true;
     }
+    
 }
