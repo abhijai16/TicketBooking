@@ -40,7 +40,7 @@ public class TrainService {
         return trainList.stream().filter(train -> validTrain(train, source, destination)).collect(Collectors.toList());
     }
 
-    public void addTrain(Train newTrain) {
+    public void addTrain(Train newTrain) throws IOException{
         // Check if a train with the same trainId already exists
         Optional<Train> existingTrain = trainList.stream()
                 .filter(train -> train.getTrainId().equalsIgnoreCase(newTrain.getTrainId()))
@@ -56,7 +56,7 @@ public class TrainService {
         }
     }
 
-    public void updateTrain(Train updatedTrain) {
+    public void updateTrain(Train updatedTrain) throws IOException{
         // Find the index of the train with the same trainId
         OptionalInt index = IntStream.range(0, trainList.size())
                 .filter(i -> trainList.get(i).getTrainId().equalsIgnoreCase(updatedTrain.getTrainId()))
@@ -72,12 +72,8 @@ public class TrainService {
         }
     }
 
-    private void saveTrainListToFile() {
-        try {
-            objectMapper.writeValue(new File(TRAIN_DB_PATH), trainList);
-        } catch (IOException e) {
-            System.out.println("Failed to save train list to file: " + e.getMessage());
-        }
+    private void saveTrainListToFile() throws IOException{
+        objectMapper.writeValue(new File(TRAIN_DB_PATH), trainList);
     }
 
     

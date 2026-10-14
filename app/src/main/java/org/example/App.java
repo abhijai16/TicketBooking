@@ -88,6 +88,10 @@ public class App {
                     }
                     break;
                 case 3:
+                    if (!userBookingService.isLoggedIn()) {
+                        System.out.println("❌ Please login first (option 2).");
+                        break;
+                    }
                     try{
                         userBookingService.fetchBookings();
                     }catch (Exception ex){
@@ -155,7 +159,10 @@ public class App {
                     break;
 
                 case 5:
-
+                    if (!userBookingService.isLoggedIn()) {
+                        System.out.println("❌ Please login first (option 2).");
+                        break;
+                    }
                     if (trainSelectedForBooking == null) {
                         System.out.println("❌ Please select a train first in option 4!");
                         break;
@@ -190,6 +197,10 @@ public class App {
                     }
                     break;
                 case 6:
+                    if (!userBookingService.isLoggedIn()) {
+                        System.out.println("❌ Please login first (option 2).");
+                        break;
+                    }
                     System.out.println("Enter the ticket id to cancel the booking");
                     String ticketId = scanner.nextLine();
                     boolean isCancelled = userBookingService.cancelBooking(ticketId);

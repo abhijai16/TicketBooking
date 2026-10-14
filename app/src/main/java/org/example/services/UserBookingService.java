@@ -29,6 +29,23 @@ public class UserBookingService {
         userList = objectMapper.readValue(new File(USER_FILE_PATH), new TypeReference<List<User>>() {});
     }
 
+    public boolean isLoggedIn() {
+        return user != null;
+    }
+
+    private boolean updateSeat(Train train, int row, int seat, int newValue) {
+        List<Integer> rowSeats = train.getSeats().get(row);
+        int oldValue = rowSeats.get(seat);
+        rowSeats.set(seat, newValue);                 // change in memory
+        try {
+            new TrainService().addTrain(train);       // save to trains.json
+            return true;
+        } catch (IOException ex) {
+            rowSeats.set(seat, oldValue);             // save failed: put it back
+            System.out.println("Could not save the train data: " + ex.getMessage());
+            return false;
+        }
+    }
     public boolean signUp(User user) throws IOException{
         try{
             Optional<User> foundUser = userList.stream().filter(user1 -> {
@@ -56,6 +73,10 @@ public class UserBookingService {
     }
 
     public void fetchBookings(){
+        if (user == null) {
+            System.out.println("Please login first.");
+            return;
+        }
         System.out.println("Fetching your bookings");
         user.printTickets();
     }
@@ -71,6 +92,10 @@ public class UserBookingService {
 
 
     public boolean cancelBooking(String ticketId) throws IOException{
+        if (user == null) {
+            System.out.println("Please login first.");
+            return false;
+        }
         if (ticketId == null || ticketId.isEmpty()) {
             System.out.println("Ticket ID cannot be null or empty.");
             return Boolean.FALSE;
@@ -102,41 +127,46 @@ public class UserBookingService {
     }
 
     public Boolean bookTrainSeat(Train train, int row, int seat) {
-        try{
-            TrainService trainService = new TrainService();
-            List<List<Integer>> seats = train.getSeats();
-            if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
-                if (seats.get(row).get(seat) == 0) {
-                    seats.get(row).set(seat, 1);
-
-                    train.setSeats(seats);
-                    trainService.addTrain(train);
-
-                    Ticket ticket = new Ticket();
-
-                    ticket.setSource(train.getStations().getFirst());
-                    ticket.setDestination(train.getStations().getLast());
-                    ticket.setTrain(train);
-                    ticket.setUserId(user.getUserId());
-                    ticket.setDateOfTravel("2021-09-01");
-                    ticket.setTicketId(UserServiceUtil.generateTicketId());
-
-                    user.getTicketsBooked().add(ticket);
-
-                    System.out.println("Seat booked successfully  !  ");
-
-                    System.out.println(ticket.getTicketInfo());
-
-                    saveUserListToFile();
-                    return true; // Booking successful
-                } else {
-                    return false; // Execute when Seat is already booked
-                }
-            } else {
-                return false; // Execute when Invalid row or seat index
-            }
-        }catch (IOException ex){
-            return Boolean.FALSE;
+        // 1. Checks that change nothing, done BEFORE touching any data
+        if (user == null) {
+            System.out.println("Please login first.");
+            return false;
         }
+        List<List<Integer>> seats = train.getSeats();
+        if (row < 0 || row >= seats.size() || seat < 0 || seat >= seats.get(row).size()) {
+            return false;                              // invalid row or seat
+        }
+        if (seats.get(row).get(seat) != 0) {
+            return false;                              // seat already booked
+        }
+
+        // 2. Build the ticket (no side effects yet)
+        Ticket ticket = new Ticket();
+        ticket.setSource(train.getStations().getFirst());
+        ticket.setDestination(train.getStations().getLast());
+        ticket.setTrain(train);
+        ticket.setUserId(user.getUserId());
+        ticket.setDateOfTravel("2021-09-01");
+        ticket.setTicketId(UserServiceUtil.generateTicketId());
+
+        // 3. Reserve the seat (saved to trains.json)
+        if (!updateSeat(train, row, seat, 1)) {
+            return false;
+        }
+
+        // 4. Record the ticket; if that fails, undo the reservation
+        user.getTicketsBooked().add(ticket);
+        try {
+            saveUserListToFile();
+        } catch (IOException ex) {
+            user.getTicketsBooked().remove(ticket);
+            updateSeat(train, row, seat, 0);           // release the seat again
+            System.out.println("Could not save your ticket: " + ex.getMessage());
+            return false;
+        }
+
+        System.out.println("Seat booked successfully!");
+        System.out.println(ticket.getTicketInfo());
+        return true;
     }
 }
