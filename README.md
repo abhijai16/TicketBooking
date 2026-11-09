@@ -1,4 +1,6 @@
-<img src="/cover/cover.png" alt="App CLI" \>
+<p align="center">
+  <img src="cover/cover.png" alt="Ticket Booking System CLI" width="900">
+</p>
 
 ---
 
