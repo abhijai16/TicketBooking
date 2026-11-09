@@ -1,17 +1,36 @@
 package org.example;
 
-import org.example.entities.*;
-import org.example.services.UserBookingService;
-import org.example.util.UserServiceUtil;
-
 import java.io.IOException;
-import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.UUID;
+
+import org.example.entities.Train;
+import org.example.entities.User;
+import org.example.services.UserBookingService;
+import org.example.util.UserServiceUtil;
 
 public class App {
 
     public static void main(String[] args) throws IOException {
+        
+        System.out.println(
+            "\u001B[36m" +
+            """
+        ████████╗██╗ ██████╗██╗  ██╗███████╗████████╗    ██████╗  ██████╗  ██████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗ 
+        ╚══██╔══╝██║██╔════╝██║ ██╔╝██╔════╝╚══██╔══╝    ██╔══██╗██╔═══██╗██╔═══██╗██║ ██╔╝██║████╗  ██║██╔════╝ 
+           ██║   ██║██║     █████╔╝ █████╗     ██║       ██████╔╝██║   ██║██║   ██║█████╔╝ ██║██╔██╗ ██║██║  ███╗
+           ██║   ██║██║     ██╔═██╗ ██╔══╝     ██║       ██╔══██╗██║   ██║██║   ██║██╔═██╗ ██║██║╚██╗██║██║   ██║
+           ██║   ██║╚██████╗██║  ██╗███████╗   ██║       ██████╔╝╚██████╔╝╚██████╔╝██║  ██╗██║██║ ╚████║╚██████╔╝
+           ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝       ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+            """ +
+            "\u001B[0m"
+        );
 
         System.out.println("Welcome to my Ticket Booking System!");
         Scanner scanner = new Scanner(System.in);

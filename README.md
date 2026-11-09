@@ -1,10 +1,12 @@
+<img src="/cover/cover.png" alt="App CLI" \>
+
 ---
 
-# 🎟️ **Ticket Booking System (CLI-Based)**  
+#  **Ticket Booking System (CLI-Based)**  
 
 This project is my first **Java-based Ticket Booking System**, designed to strengthen my **Object-Oriented Programming (OOP)** skills while implementing practical functionalities like **user authentication, train search, ticket booking, and cancellation**. *Special thanks to [Lovepreet Singh](https://github.com/AlphaDecodeXr) for his amazing tutorials and projects. His teaching helped me a lot!* 
 
-## 🚀 **Features**  
+##  **Features**  
 
 ✔️ **User Authentication** – Secure sign-up and login system  
 ✔️ **Train Search** – Find trains between selected stations  
@@ -12,14 +14,14 @@ This project is my first **Java-based Ticket Booking System**, designed to stren
 ✔️ **Booking Management** – Reserve and cancel train seats  
 ✔️ **Data Persistence** – Store user and booking information  
 
-## 🛠️ **Technologies Used**  
+##  **Technologies Used**  
 
 🔹 **Java** – Core logic and implementation  
 🔹 **Gradle** – Build automation and dependency management  
 🔹 **Collections & Streams API** – Efficient data handling  
 🔹 **OOP Principles** – Encapsulation, Abstraction, and Polymorphism  
 
-## 📦 **Setup & Run**  r
+##  **Setup & Run**  r
 
 ### **Step 1:** Clone the Repository  
 ```sh
@@ -37,7 +39,7 @@ cd TicketBooking
 ./gradlew run
 ```
 
-## 📌 **How to Use**  
+##  **How to Use**  
 
 1️⃣ **Sign Up** – Register a new account  
 2️⃣ **Login** – Access your account securely  
@@ -47,10 +49,10 @@ cd TicketBooking
 6️⃣ **Cancel Booking** – Remove an existing reservation  
 7️⃣ **Exit** – Close the application  
 
-## 🏗️ **Future Enhancements**  
+##  **Future Enhancements**  
 
-🚀 **Graphical User Interface (GUI)** – Improve user experience  
-💾 **Database Integration** – Store user and train data persistently  
-🔧 **Admin Panel** – Manage train schedules and user bookings  
+ **Graphical User Interface (GUI)** – Improve user experience  
+ **Database Integration** – Store user and train data persistently  
+ **Admin Panel** – Manage train schedules and user bookings  
 
 ---
